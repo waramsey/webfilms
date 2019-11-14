@@ -9,10 +9,10 @@ import java.io.FileNotFoundException;
 
 public class UtilFile {
 	   static final boolean _W = System.getProperty("os.name").toLowerCase().contains("windows");
-	   static String _PROP_FILENAME_WIN_LOCAL = "C:\\Users\\Alex\\workspace4830-1023-midterm-Ramsey\\project4830-1023-midterm-Ramsey\\WebContent\\config.properties";
+	   static String _PROP_FILENAME_WIN_LOCAL = "C:\\Users\\Alex\\Documents\\GitHub\\webfilms\\webfilmsProject\\WebContent\\config.properties";	   
 	   static String _PROP_FILENAME_OSX_LOCAL = "/YOUR_PATH/webproject/WebContent/config.properties";
 	   // * Remote server path
-	   static String _PROP_FILENAME_REMOTE = "/var/lib/tomcat7/webapps/webproject/config.properties";
+	   static String _PROP_FILENAME_REMOTE = "/var/lib/tomcat7/webapps/webfilmsProject/config.properties";
 	   static Properties prop = new Properties();
 
 	   public static void loadProperty() throws Exception {
