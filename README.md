@@ -14,3 +14,9 @@ The main benefit to movie theaters is that it allows them to reach more customer
 
 The main benefit to moviegoers is that it makes it much easier for them to reserve movie tickets.
 
+## Key Features
+Ability for customers to reserve available tickets from movie theaters.
+
+Ability for movie theaters to list multiple movies and times for each movie.
+
+Movie information, including synopses, will be displayed.
