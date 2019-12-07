@@ -13,16 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class MovieSelect
+ * Servlet implementation class ReserveSeat
  */
-@WebServlet("/MovieSelect")
-public class MovieSelect extends HttpServlet {
+@WebServlet("/ReserveSeat")
+public class ReserveSeat extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public MovieSelect() {
+    public ReserveSeat() {
         super();
     }
 
@@ -30,34 +30,19 @@ public class MovieSelect extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
+		//String movieName = request.getParameter("movieName");
+	    String movieName = "Bee Movie";
 		Connection connection = null;
-
+		String getInfoSql = "SELECT * FROM movieList WHERE title LIKE ?";
+		String title = "", synopsis = "", rating = "", poster = "", duration = "";
 	    
 		try {
 			DBConnection.getDBConnection();
 			connection = DBConnection.connection;
 			
-			//Part 1: make a loop that runs request.getParameter() for every title in the database.  When it isn't null, we've found our movie title.
-			PreparedStatement preparedStmt = connection.prepareStatement("SELECT title FROM movieList");
-			ResultSet rs = preparedStmt.executeQuery();
-			String movie = null;
-			rs.next();
-			do {
-				movie = request.getParameter(rs.getString("title").trim());
-			} while (rs.next() && movie == null);
-			
-			
-			//Part 2: We've found our movie title. Now we can get the movie by name.
-			String movieName = request.getParameter(movie);
-			String getInfoSql = "SELECT * FROM movieList WHERE title LIKE ?";
-			String title = "", synopsis = "", rating = "", poster = "", duration = "";
-			
-			
-			
-			preparedStmt = connection.prepareStatement(getInfoSql);
+			PreparedStatement preparedStmt = connection.prepareStatement(getInfoSql);
 			preparedStmt.setString(1, movieName);
-			rs = preparedStmt.executeQuery();
+			ResultSet rs = preparedStmt.executeQuery();
 			
 			while (rs.next()) {
 				title = rs.getString("title").trim();
