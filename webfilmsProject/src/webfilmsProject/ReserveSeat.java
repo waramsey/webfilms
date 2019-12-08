@@ -30,72 +30,92 @@ public class ReserveSeat extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		
-		//We need to know what theater we're in AND what movie we're in
-		//SELECT * FROM (theatername);
-		//Find the movie, the chosen time, and seats
-		
 		String theater = InformationManager.getTheater();
 		String movie = InformationManager.getMovie();
-		String time = InformationManager.getTime();
+		String time = InformationManager.getTime(); //TODO need to set this in TimeSelect
 		
-		//String movieName = request.getParameter("movieName");
-	    String movieName = "Bee Movie";
 		Connection connection = null;
-		String getInfoSql = "SELECT Seats FROM movieList WHERE title LIKE ?";
-		String title = "", synopsis = "", rating = "", poster = "", duration = "";
+		String getInfoSql = "SELECT * FROM theater WHERE movie in (SELECT movie FROM theater GROUP BY movie HAVING count(*) > 1)";
+		int Seats = 0, id = 1;
+		String Time = "";
 	    
 		try {
 			DBConnection.getDBConnection();
 			connection = DBConnection.connection;
 			
+			//find out which seat was clicked
+			String[] seatArray = {"1A", "1B", "1C", "1D", "2A", "2B", "2C", "2D", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "4D"};
+			String seat = null;
+			int seatNum;
+			for (seatNum = 0; seatNum < seatArray.length; seatNum++) {
+				seat = request.getParameter(seatArray[seatNum]);
+				if (seat != null) {
+					break;
+				}
+			}
+			
 			PreparedStatement preparedStmt = connection.prepareStatement(getInfoSql);
-			preparedStmt.setString(1, movieName);
 			ResultSet rs = preparedStmt.executeQuery();
 			
+			int newSeats = 0;
 			while (rs.next()) {
-				title = rs.getString("title").trim();
-				synopsis = rs.getString("synopsis").trim();
-				rating = rs.getString("rating").trim();
-				poster = rs.getString("poster").trim();
-				duration = rs.getString("duration").trim();
+				Time = rs.getString("Time").trim();
+				if (Time.equals(time)) {
+					Seats = rs.getInt("Seats");
+					newSeats = (int) (Seats + Math.pow(10, (seatArray.length - seatNum - 1))); //issue of what happens if the seat was already reserved
+					preparedStmt.execute("UPDATE " + theater + " SET Movie = " + movie + ", Time = " + time + ", Seats = " + newSeats + " WHERE id = " + id);
+					break;
+				}
+				id++;
 			}
 			
 			preparedStmt.close();
 			connection.close();
 			
+			//use newSeats to generate the table
+			String tableGen = Integer.toString(newSeats);
+			String table = "<table align='center'>";
+			for (int i = 0; i < tableGen.length(); i++) {
+				if (i % 4 == 0) {
+					table += "<tr>";
+				}
+				if (tableGen.charAt(i) == '0') {
+					table += "<th><form action='ReserveSeat' method='post'>" + //
+							"<input type='submit' class='ReserveSeat' name='" +
+							seatArray[i] + "' value='" + seatArray[i] + "'></form></th>";
+				} else if (tableGen.charAt(i) == '1') {
+					table += "<th><button type='button' class='reserved'><h1>X</h1></button></th>";
+				}
+				if (i % 4 == 3) {
+					table += "</tr>";
+				}
+			}
+			table += "</table>";
 			
+			
+			//TODO set the response (should be nearly the same as Seats.html, except some the taken seat is taken)
 			response.setContentType("text/html");
 			PrintWriter out = response.getWriter();
 			String docType = "<!doctype html public \"-//w3c//dtd html 4.0 " + "transitional//en\">\n";
 			out.println(docType + //
 		            "<html>\n" + //
-		            "<head><title>" + title + "</title></head>\n" + //
+		            "<head><title>" + movie + " Seats</title></head>\n" + //
 		            "<body bgcolor=\"#d3d3d3\">\n" + //
-		            "<style>.moviePoster {" + //
-		            "float: left; margin-right: 20px;" + //
-		            "margin-bottom: 10px; height: 600px;" + //
-		            "width: 400px; clear: left;" + //
-		            "}</style>" + //
-		            
-		            "<img class='moviePoster' src='" + poster + "' alt='Webfilms'>" + //
-		            
-		            "<h2 align=\"center\">" + title + "</h2>\n" + //
-		            "<ul>\n" + //
-
-		            "  <li><b>Rating</b>: " + rating + "\n" + //
-		            "  <li><b>Duration</b>: " + duration + "\n" + //
-		            "  <li><b>Synopsis</b>: " + synopsis + "\n" + //
-		            "</ul>\n" + //
-		            
-					"<h2 align=\"center\">Show Times</h2>\n" + //
-					"<ul>\n" + //
-					
-					//TODO Update with a link to reserve tickets
-					"  <li><b>Time 1</b>\n" + //
-					"  <li><b>Time 2</b>\n" + //
-					"  <li><b>Time 3</b>\n" + //
-					"</ul>\n");
+		            "<style>section {" + //
+		            "float: left; width: 350px;" + //
+		            "padding: 10px;}" + //
+		            ".ReserveSeat {padding: 40px 50px;" + //
+		            "border-radius: 8px; background-color: #800000;" + //
+		            "color: WHITE; font-size: 30px;}" + //
+		            ".reserved {border-radius: 8px; width: 140px;" + //
+		            "height: 115px; background-color: BLACK;" + //
+		            "color: WHITE;}</style>" + //
+		            "<div style='background-color:#a9a9a9' align='center'>" + //
+		            "<h1>Seats for " + movie + "</h1></div>" + //
+		            table + "<section><form id='SendEmail' action='SendEmail' method='POST'>" + //
+		            "Email: <input type='text' name='email'>" + //
+		            "<input type='submit' value='Reserve Seats' /></form></section>"
+		            );
 
 		      out.println("</body></html>");
 		} catch (Exception e) {

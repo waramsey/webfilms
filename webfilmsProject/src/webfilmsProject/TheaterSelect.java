@@ -58,7 +58,7 @@ public class TheaterSelect extends HttpServlet {
 
 			//We've found our theater. Now we can get the theater by name from the Database.
 			String theaterName = request.getParameter(theater);
-			InformationManager.setTheater(theaterName);
+			InformationManager.setTheater(theaterID);
 			String getInfoSql = "SELECT * FROM " + theaterID;
 			String title = "", poster = "";
 			PreparedStatement preparedStmt = connection.prepareStatement(getInfoSql);
