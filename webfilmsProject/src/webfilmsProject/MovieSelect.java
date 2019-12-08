@@ -54,7 +54,7 @@ public class MovieSelect extends HttpServlet {
 			String title = "", synopsis = "", rating = "", poster = "", duration = "";
 			
 			
-			
+
 			preparedStmt = connection.prepareStatement(getInfoSql);
 			preparedStmt.setString(1, movieName);
 			rs = preparedStmt.executeQuery();
