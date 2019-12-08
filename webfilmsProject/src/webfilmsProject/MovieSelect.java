@@ -50,6 +50,7 @@ public class MovieSelect extends HttpServlet {
 			
 			//Part 2: We've found our movie title. Now we can get the movie by name.
 			String movieName = request.getParameter(movie);
+			InformationManager.setMovie(movieName);
 			String getInfoSql = "SELECT * FROM movieList WHERE title LIKE ?";
 			String title = "", synopsis = "", rating = "", poster = "", duration = "";
 			

@@ -30,10 +30,19 @@ public class ReserveSeat extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
+		//We need to know what theater we're in AND what movie we're in
+		//SELECT * FROM (theatername);
+		//Find the movie, the chosen time, and seats
+		
+		String theater = InformationManager.getTheater();
+		String movie = InformationManager.getMovie();
+		String time = InformationManager.getTime();
+		
 		//String movieName = request.getParameter("movieName");
 	    String movieName = "Bee Movie";
 		Connection connection = null;
-		String getInfoSql = "SELECT * FROM movieList WHERE title LIKE ?";
+		String getInfoSql = "SELECT Seats FROM movieList WHERE title LIKE ?";
 		String title = "", synopsis = "", rating = "", poster = "", duration = "";
 	    
 		try {
