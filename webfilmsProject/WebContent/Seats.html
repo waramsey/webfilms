@@ -10,7 +10,11 @@
 		body {
 			background-color: #d3d3d3;
 		}
-		
+		section {
+    		width:350px;
+    		float:left;
+    		padding:10px;	 	 
+		}
 	</style>
 	<table>
 		<tr>
@@ -102,5 +106,15 @@
 			</th>
 		</tr>
 	</table>
+	
+<section>
+	<form id="SendEmail" action="SendEmail" method="POST">
+	
+		Email: <input type="text" name="email">
+		<input type="submit" value="Reserve Seats" />
+		
+	</form>
+</section>
+
 </body>
 </html>
