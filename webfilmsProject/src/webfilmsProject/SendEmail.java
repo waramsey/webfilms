@@ -48,10 +48,10 @@ public class SendEmail extends HttpServlet {
 	         MimeMessage message = new MimeMessage(session);
 
 	         // Set From: header field of the header.
-	         message.setFrom(new InternetAddress(from));
+	         message.setFrom(new InternetAddress(FromEmail));
 
 	         // Set To: header field of the header.
-	         message.addRecipient(Message.RecipientType.TO, new InternetAddress(to));
+	         message.addRecipient(Message.RecipientType.TO, new InternetAddress(ToEmail));
 
 	         // Set Subject: header field
 	         message.setSubject("This is the Subject Line!");
