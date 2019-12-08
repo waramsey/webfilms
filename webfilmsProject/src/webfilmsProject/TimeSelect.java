@@ -13,16 +13,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class ReserveSeat
+ * Servlet implementation class TimeSelect
  */
-@WebServlet("/ReserveSeat")
-public class ReserveSeat extends HttpServlet {
+@WebServlet("/TimeSelect")
+public class TimeSelect extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ReserveSeat() {
+    public TimeSelect() {
         super();
     }
 
@@ -30,50 +30,47 @@ public class ReserveSeat extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		
 		String theater = InformationManager.getTheater();
 		String movie = InformationManager.getMovie();
-		String time = InformationManager.getTime(); //TODO need to set this in TimeSelect
-		
 		Connection connection = null;
-		String getInfoSql = "SELECT * FROM " + theater + " WHERE " + movie + " in (SELECT " + movie + " FROM " + theater + " GROUP BY " + movie + " HAVING count(*) > 1)";
-		int Seats = 0, id = 1;
-		String Time = "";
-	    
+
+		String getInfoSql = "SELECT * FROM " + theater + " WHERE " + movie + " in (SELECT " + 
+				movie + " FROM " + theater + " GROUP BY " + movie + " HAVING count(*) > 1)";
+		//returns all the rows belonging to the given movie	
+		
 		try {
 			DBConnection.getDBConnection();
 			connection = DBConnection.connection;
 			
-			//find out which seat was clicked
-			String[] seatArray = {"1A", "1B", "1C", "1D", "2A", "2B", "2C", "2D", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "4D"};
-			String seat = null;
-			int seatNum;
-			for (seatNum = 0; seatNum < seatArray.length; seatNum++) {
-				seat = request.getParameter(seatArray[seatNum]);
-				if (seat != null) {
-					break;
-				}
-			}
-			
+			//Part 1: make a loop that runs request.getParameter() for every title in the database.  When it isn't null, we've found our movie title.
 			PreparedStatement preparedStmt = connection.prepareStatement(getInfoSql);
 			ResultSet rs = preparedStmt.executeQuery();
+			String time = null;
+			rs.next();
+			do {
+				time = request.getParameter(rs.getString("Time").trim());
+			} while (rs.next() && time == null);
+			InformationManager.setTime(time);
 			
-			int newSeats = 0;
+			int Seats = 0;
+			
+			String[] seatArray = {"1A", "1B", "1C", "1D", "2A", "2B", "2C", "2D", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "4D"};
+
+			preparedStmt = connection.prepareStatement("SELECT " + movie + " FROM " + theater);
+			rs = preparedStmt.executeQuery();
+			
 			while (rs.next()) {
-				Time = rs.getString("Time").trim();
-				if (Time.equals(time)) {
+				if (rs.getString("Time").trim().equals(time)) {
 					Seats = rs.getInt("Seats");
-					newSeats = (int) (Seats + Math.pow(10, (seatArray.length - seatNum - 1))); //issue of what happens if the seat was already reserved
-					preparedStmt.execute("UPDATE " + theater + " SET Movie = " + movie + ", Time = " + time + ", Seats = " + newSeats + " WHERE id = " + id);
-					break;
 				}
-				id++;
 			}
 			
 			preparedStmt.close();
 			connection.close();
 			
 			//use newSeats to generate the table
-			String tableGen = Integer.toString(newSeats);
+			String tableGen = Integer.toString(Seats);
 			String table = "<table align='center'>";
 			for (int i = 0; i < tableGen.length(); i++) {
 				if (i % 4 == 0) {

@@ -32,7 +32,7 @@ public class MovieSelect extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		Connection connection = null;
-
+		String theater = InformationManager.getTheater();
 	    
 		try {
 			DBConnection.getDBConnection();
@@ -68,6 +68,16 @@ public class MovieSelect extends HttpServlet {
 				duration = rs.getString("duration").trim();
 			}
 			
+			preparedStmt = connection.prepareStatement("SELECT * FROM " + theater + " WHERE Movie LIKE " + movie);
+			rs = preparedStmt.executeQuery();
+			
+			String table = "<table><tr>";
+			while (rs.next()) {
+				table += "<th><form action='TimeSelect' method='post'><input type='submit' class='TimeSelect' "
+						+ "name='" + rs.getString("Time") + "' value='" + rs.getString("Time") + "'></form></th>";
+			}
+			table += "</tr></table>";
+			
 			preparedStmt.close();
 			connection.close();
 			
@@ -79,32 +89,25 @@ public class MovieSelect extends HttpServlet {
 		            "<html>\n" + //
 		            "<head><title>" + title + "</title></head>\n" + //
 		            "<body bgcolor=\"#d3d3d3\">\n" + //
-		            "<style>.moviePoster {" + //
-		            "float: left; margin-right: 20px;" + //
-		            "margin-bottom: 10px; height: 600px;" + //
-		            "width: 400px; clear: left;" + //
+		            "<style>.TimeSelect {padding: 15px 20px;" + //
+		            "border-radius: 8px; background-color: #800000;" + //
+		            "color: WHITE; font-size: 20px;" + //
+		            "}.moviePoster {" + //
+		            "float: left; margin-left:30px; margin-right: 80px;" + //
+		            "margin-bottom: 10px; height: 300px;" + //
+		            "width: 200px; clear: left;" + //
 		            "}</style>" + //
 		            
-		            "<img class='moviePoster' src='" + poster + "' alt='Webfilms'>" + //
+		            "<div><div><h1 style='background-color:#a9a9a9' align='center'>" + movie + "</h1></div>" + //
+		            "<img class='moviePoster' src='" + poster + "' alt='" + movie + "'>" + //
 		            
-		            "<h2 align=\"center\">" + title + "</h2>\n" + //
-		            "<ul>\n" + //
+		            "<h3>Rated " + rating + "</h3>" + //
+		            "<h3>Duration: " + duration + "</h3>" + //
+		            "<h3>Synopsis</h3><p>" + synopsis + "</p>" + //
 
-		            "  <li><b>Rating</b>: " + rating + "\n" + //
-		            "  <li><b>Duration</b>: " + duration + "\n" + //
-		            "  <li><b>Synopsis</b>: " + synopsis + "\n" + //
-		            "</ul>\n" + //
-		            
-					"<h2 align=\"center\">Show Times</h2>\n" + //
-					"<ul>\n" + //
-					
-					//TODO Update with a link to reserve tickets
-					"  <li><b>Time 1</b>\n" + //
-					"  <li><b>Time 2</b>\n" + //
-					"  <li><b>Time 3</b>\n" + //
-					"</ul>\n");
+		            "<h2>Show Times</h2>" + table);
 
-		      out.println("</body></html>");
+		      out.println("</div></body></html>");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
