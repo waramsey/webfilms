@@ -54,7 +54,7 @@ public class SendEmail extends HttpServlet {
                     InternetAddress.parse(toEmail)
             );
             message.setSubject("WebFilms Seat Reservation");
-            message.setText("Your seats have been reserved!\n");
+            message.setText("Your seats have been reserved!\n\nThank you for using WebFilms!");
 
             Transport.send(message);
 
