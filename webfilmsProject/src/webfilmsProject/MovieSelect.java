@@ -92,7 +92,7 @@ public class MovieSelect extends HttpServlet {
 		            "border-radius: 8px; background-color: #800000;" + //
 		            "color: WHITE; font-size: 20px;" + //
 		            "}.moviePoster {" + //
-		            "float: left; margin-left:30px; margin-right: 80px;" + //
+		            "float: left; margin-left:25px; margin-right: 75px;" + //
 		            "margin-bottom: 10px; height: 300px;" + //
 		            "width: 200px; clear: left;" + //
 		            "}</style>" + //
