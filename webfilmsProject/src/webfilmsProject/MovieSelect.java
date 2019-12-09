@@ -98,7 +98,7 @@ public class MovieSelect extends HttpServlet {
 		            "}</style>" + //
 		            
 		            "<div><div><h1 style='background-color:#a9a9a9' align='center'>" + movie + "</h1></div>" + //
-		            "<img class='moviePoster' src='" + poster + "' alt='" + movie + "'>" + //
+		            "<img class='moviePoster' border='4' src='" + poster + "' alt='" + movie + "'>" + //
 		            
 		            "<h3>Rated " + rating + "</h3>" + //
 		            "<h3>Duration: " + duration + "</h3>" + //

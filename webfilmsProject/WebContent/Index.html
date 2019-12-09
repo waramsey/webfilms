@@ -10,44 +10,43 @@
 		body {
 			background-color: #d3d3d3;
 		}
-		
+		p {
+			font-size: 20px;
+		}
+		.TheaterSelect {
+			padding: 8px 10px;
+			border-radius: 8px;
+			background-color: #800000;
+			color: WHITE;
+			font-size: 18px;
+		}
 		.theaterLogo {
 			float: left;
 			margin-left: 10px;
 			margin-right: 10px;
 			margin-bottom: 10px;
-			height: 120px;
-			width: 120px;
+			height: 150px;
+			width: 150px;
 			clear: left;
-			border: 3 px solid black;
 		}
 	</style>
 
 
 	<div> <!-- The Big Div -->
 	
-		<h1>WebFilms</h1>
+		<div style='background-color:#a9a9a9' align='center'>
+			<h1>WebFilms</h1>
+		</div>
 	
-		<table>
+		<table align='center'>
 			<tr>
 				<th>
 					<form id='TheaterSelect' action='TheaterSelect' method='post'>
 						<div>
-							<p><img class='theaterLogo' src='https://is1-ssl.mzstatic.com/image/thumb/Purple123/v4/1b/e4/f7/1be4f789-e780-708e-c637-c47aec068301/AppIcon-0-1x_U007emarketing-0-0-GLES2_U002c0-512MB-sRGB-0-0-0-85-220-0-0-0-10.png/246x0w.png' class='moviePoster'>Aksarben Cinema<br>2110 S 67th Street<br>Omaha, NE<br></p>
+							<p><img class='theaterLogo' border='3' src='https://is1-ssl.mzstatic.com/image/thumb/Purple123/v4/1b/e4/f7/1be4f789-e780-708e-c637-c47aec068301/AppIcon-0-1x_U007emarketing-0-0-GLES2_U002c0-512MB-sRGB-0-0-0-85-220-0-0-0-10.png/246x0w.png' class='moviePoster'>Aksarben Cinema<br>2110 S 67th Street<br>Omaha, NE<br></p>
 						</div>
 						<div>
-							<input type='submit' name='Aksarben' value='Aksarben'>
-						</div>
-					</form>
-				</th>
-				
-				<th>
-					<form id='TheaterSelect' action='TheaterSelect' method='post'>
-						<div>
-							<p><img class='theaterLogo' src='https://sgi.offerscdn.net/i/zdcs-merchants/03WdNX5P2QBENQI1nJN2U4g.h200.w200.flpad.v36.bffffff.png' class='moviePoster'>Oakview Theater<br>3555 S 140th Plaza<br>Omaha, NE<br></p>
-						</div>
-						<div>
-							<input type='submit' name='Oakview' value='Oakview'>
+							<input type='submit' class='TheaterSelect' name='Aksarben' value='Aksarben'>
 						</div>
 					</form>
 				</th>
@@ -55,10 +54,21 @@
 				<th>
 					<form id='TheaterSelect' action='TheaterSelect' method='post'>
 						<div>
-							<p><img class='theaterLogo' src='https://scontent-dfw5-1.xx.fbcdn.net/v/t1.0-9/543528_424623120887551_634401295_n.jpg?_nc_cat=108&_nc_ohc=o0rRwpB1Lg4AQm7531BMfdY1wH3KLoZcKO3vUmxZIviFyUgsSsk8XNCGQ&_nc_ht=scontent-dfw5-1.xx&oh=63814d5e4ddad69be87ba456748f0584&oe=5E76A800' class='moviePoster'>Village Pointe Cinema<br>304 North 174th Street<br>Omaha, NE<br></p>
+							<p><img class='theaterLogo' border='3' src='https://sgi.offerscdn.net/i/zdcs-merchants/03WdNX5P2QBENQI1nJN2U4g.h200.w200.flpad.v36.bffffff.png' class='moviePoster'>Oakview Theater<br>3555 S 140th Plaza<br>Omaha, NE<br></p>
 						</div>
 						<div>
-							<input type='submit' name='Village Pointe' value='Village Pointe'>
+							<input type='submit' class='TheaterSelect' name='Oakview' value='Oakview'>
+						</div>
+					</form>
+				</th>
+				
+				<th>
+					<form id='TheaterSelect' action='TheaterSelect' method='post'>
+						<div>
+							<p><img class='theaterLogo' border='3' src='https://scontent-dfw5-1.xx.fbcdn.net/v/t1.0-9/543528_424623120887551_634401295_n.jpg?_nc_cat=108&_nc_ohc=o0rRwpB1Lg4AQm7531BMfdY1wH3KLoZcKO3vUmxZIviFyUgsSsk8XNCGQ&_nc_ht=scontent-dfw5-1.xx&oh=63814d5e4ddad69be87ba456748f0584&oe=5E76A800' class='moviePoster'>Village Pointe Cinema<br>304 North 174th Street<br>Omaha, NE<br></p>
+						</div>
+						<div>
+							<input type='submit' class='TheaterSelect' name='Village Pointe' value='Village Pointe'>
 						</div>
 					</form>
 				</th>

@@ -66,23 +66,15 @@ public class TheaterSelect extends HttpServlet {
 			PreparedStatement preparedStmt = connection.prepareStatement(getInfoSql);
 			ResultSet rs = preparedStmt.executeQuery();
 			String table = "";
-			int movieNumber = 0;
 
 			while (rs.next()) {
 				title = rs.getString("title").trim();
 				poster = rs.getString("poster").trim();
 
-				if (movieNumber % 3 == 0) {
-					table += "<tr>";
-				}
 				table += "<th><form id='MovieSelect' action='MovieSelect' method='post'>" + //
-						"<div><img src='" + poster + "' class='moviePoster'></div>" + //
-						"<div><input type='submit' name='" + title +"' value='" + title + "'></div>" + //
+						"<div><img src='" + poster + "' class='moviePoster' border='4'></div>" + //
+						"<div><input type='submit' name='" + title + "' class='MovieSelect' value='" + title + "'></div>" + //
 						"</form></th>";
-				if (movieNumber % 3 == 2) {
-					table += "</tr>";
-				}
-				movieNumber++;
 			}
 
 			preparedStmt.close();
@@ -95,15 +87,14 @@ public class TheaterSelect extends HttpServlet {
 		            "<html>\n" + //
 		            "<head><title>" + theaterName + "</title></head>\n" + //
 		            "<body bgcolor=\"#d3d3d3\">\n" + //
-		            "<style>.moviePoster {" + //
-		            "height: 300px; width: 200px;" + //
-		            "margin-right: 20px; margin-bottom: 20px;" + //
+		            "<style>.MovieSelect {padding: 8px 10px;" + //
+		            "border-radius: 8px; background-color: #800000;" + //
+		            "color: WHITE; font-size: 22px;}.moviePoster {" + //
+		            "height: 300px; width: 200px; margin-left: 20px;" + //
+		            "margin-right: 20px; margin-bottom: 15px;" + //
 		            "}</style>" + //
-		            
-		            "<div><h1>" + theaterName + "</h1>" + //
-		            "<table>" + table + "</table>" + //
-		            "</div>"
-		            );
+		            "<div style='background-color:#a9a9a9' align='center'><h1>" + theaterName + "</h1></div>" + //
+		            "<table align='center><tr>" + table + "</tr></table>");
 
 		      out.println("</body></html>");
 		} catch (Exception e) {
