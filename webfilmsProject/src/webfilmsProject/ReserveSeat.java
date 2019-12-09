@@ -112,9 +112,9 @@ public class ReserveSeat extends HttpServlet {
 		            "color: WHITE;}</style>" + //
 		            "<div style='background-color:#a9a9a9' align='center'>" + //
 		            "<h1>Seats for " + movie + "</h1></div>" + //
-		            table + "<section><form id='SendEmail' action='SendEmail' method='POST'>" + //
+		            table + "<div align='center'><form id='SendEmail' action='SendEmail' method='POST'>" + //
 		            "Email: <input type='text' name='email'>" + //
-		            "<input type='submit' value='Reserve Seats' /></form></section>"
+		            "<input type='submit' value='Reserve Seats' /></form></div>"
 		            );
 
 		      out.println("</body></html>");
