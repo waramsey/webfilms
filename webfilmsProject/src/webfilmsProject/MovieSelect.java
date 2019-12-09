@@ -67,8 +67,7 @@ public class MovieSelect extends HttpServlet {
 				poster = rs.getString("poster").trim();
 				duration = rs.getString("duration").trim();
 			}
-			
-			preparedStmt = connection.prepareStatement("SELECT * FROM " + theater + " WHERE Movie LIKE " + movie);
+			preparedStmt = connection.prepareStatement("SELECT * FROM " + theater + " WHERE name='" + movie + "'");
 			rs = preparedStmt.executeQuery();
 			
 			String table = "<table><tr>";

@@ -35,15 +35,13 @@ public class TimeSelect extends HttpServlet {
 		String movie = InformationManager.getMovie();
 		Connection connection = null;
 
-		String getInfoSql = "SELECT * FROM " + theater + " WHERE " + movie + " in (SELECT " + 
-				movie + " FROM " + theater + " GROUP BY " + movie + " HAVING count(*) > 1)";
+		String getInfoSql = "SELECT * FROM " + theater + " WHERE name='" + movie + "'";
 		//returns all the rows belonging to the given movie	
-		
+
 		try {
 			DBConnection.getDBConnection();
 			connection = DBConnection.connection;
 			
-			//Part 1: make a loop that runs request.getParameter() for every title in the database.  When it isn't null, we've found our movie title.
 			PreparedStatement preparedStmt = connection.prepareStatement(getInfoSql);
 			ResultSet rs = preparedStmt.executeQuery();
 			String time = null;
@@ -57,7 +55,7 @@ public class TimeSelect extends HttpServlet {
 			
 			String[] seatArray = {"1A", "1B", "1C", "1D", "2A", "2B", "2C", "2D", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "4D"};
 
-			preparedStmt = connection.prepareStatement("SELECT " + movie + " FROM " + theater);
+			preparedStmt = connection.prepareStatement("SELECT * FROM " + theater + " WHERE name='" + movie + "'");
 			rs = preparedStmt.executeQuery();
 			
 			while (rs.next()) {

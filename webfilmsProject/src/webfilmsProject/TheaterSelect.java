@@ -51,15 +51,17 @@ public class TheaterSelect extends HttpServlet {
 					theaterID = "VP";
 					break;
 				case "Oakview" :
+					theaterID = "OakView";
+					break;
 				case "Aksarben" :
-					theaterID = theater;
+					theaterID = "AkSarBen";
 					break;
 			}
 
 			//We've found our theater. Now we can get the theater by name from the Database.
 			String theaterName = request.getParameter(theater);
 			InformationManager.setTheater(theaterID);
-			String getInfoSql = "SELECT * FROM " + theaterID;
+			String getInfoSql = "SELECT * FROM movieList";
 			String title = "", poster = "";
 			PreparedStatement preparedStmt = connection.prepareStatement(getInfoSql);
 			ResultSet rs = preparedStmt.executeQuery();
@@ -69,6 +71,7 @@ public class TheaterSelect extends HttpServlet {
 			while (rs.next()) {
 				title = rs.getString("title").trim();
 				poster = rs.getString("poster").trim();
+
 				if (movieNumber % 3 == 0) {
 					table += "<tr>";
 				}
