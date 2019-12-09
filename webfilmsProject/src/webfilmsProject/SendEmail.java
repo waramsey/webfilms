@@ -7,6 +7,8 @@ import javax.mail.internet.*;
 import javax.activation.*;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -25,46 +27,59 @@ public class SendEmail extends HttpServlet {
     }
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String ToEmail = request.getParameter("email");
-		String FromEmail = "WebFilms.CSCI4830@gmail.com";
-		
-		// Assuming you are sending email from localhost
-	      String host = "localhost";
+		final String username = "webfilms.csci4830@gmail.com";
+        final String password = "WinterBreak2019!!";
+        
+        final String toEmail = request.getParameter("email");
 
-	      // Get system properties
-	      Properties properties = System.getProperties();
+        Properties prop = new Properties();
+		prop.put("mail.smtp.host", "smtp.gmail.com");
+        prop.put("mail.smtp.port", "587");
+        prop.put("mail.smtp.auth", "true");
+        prop.put("mail.smtp.starttls.enable", "true"); //TLS
+        
+        Session session = Session.getInstance(prop,
+                new javax.mail.Authenticator() {
+                    protected PasswordAuthentication getPasswordAuthentication() {
+                        return new PasswordAuthentication(username, password);
+                    }
+                });
 
-	      // Setup mail server
-	      properties.setProperty("mail.smtp.host", host);
-	      
-	      properties.setProperty("mail.user", "WebFilms.CSCI4830@gmail.com");
-	      properties.setProperty("mail.password", "WinterBreak2019!!");
+        try {
 
-	      // Get the default Session object.
-	      Session session = Session.getDefaultInstance(properties);
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("webfilms.csci4830@gmail.com"));
+            message.setRecipients(
+                    Message.RecipientType.TO,
+                    InternetAddress.parse(toEmail)
+            );
+            message.setSubject("WebFilms Seat Reservation");
+            message.setText("Your seats have been reserved!\n");
 
-	      try {
-	         // Create a default MimeMessage object.
-	         MimeMessage message = new MimeMessage(session);
+            Transport.send(message);
 
-	         // Set From: header field of the header.
-	         message.setFrom(new InternetAddress(FromEmail));
+            System.out.println("Done");
 
-	         // Set To: header field of the header.
-	         message.addRecipient(Message.RecipientType.TO, new InternetAddress(ToEmail));
+            //Print out Webpage
+            response.setContentType("text/html");
+			PrintWriter out = response.getWriter();
+			String docType = "<!doctype html public \"-//w3c//dtd html 4.0 " + "transitional//en\">\n";
+			out.println(docType +
+		            "<html>\n" +
+		            "<head><title>" + "Reserved Seats" + "</title></head>\n" +
+		            "<body bgcolor=\"#d3d3d3\">\n" +
+					"<h2 align=\"center\">Thank you!<br>An email confirmation has been sent to you.</h2>\n" +
+		            "<div align=\"center\">" +
+		            "<form action='Index.html'>" +
+					"<input type='submit' value='Home Page'>" +
+					"</form>" +
+		            "</div>" +
+					"<ul>\n");
 
-	         // Set Subject: header field
-	         message.setSubject("This is the Subject Line!");
-
-	         // Now set the actual message
-	         message.setText("This is actual message");
-
-	         // Send message
-	         Transport.send(message);
-	         System.out.println("Sent message successfully....");
-	      } catch (MessagingException mex) {
-	         mex.printStackTrace();
-	      }
+		      out.println("</body></html>");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
 	}
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
