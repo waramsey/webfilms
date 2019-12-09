@@ -51,7 +51,7 @@ public class TimeSelect extends HttpServlet {
 			} while (rs.next() && time == null);
 			InformationManager.setTime(time);
 			
-			int Seats = 0;
+			String Seats = "";
 			
 			String[] seatArray = {"1A", "1B", "1C", "1D", "2A", "2B", "2C", "2D", "3A", "3B", "3C", "3D", "4A", "4B", "4C", "4D"};
 
@@ -60,7 +60,7 @@ public class TimeSelect extends HttpServlet {
 			
 			while (rs.next()) {
 				if (rs.getString("Time").trim().equals(time)) {
-					Seats = rs.getInt("Seats");
+					Seats = rs.getString("Seats").trim();
 				}
 			}
 			
@@ -68,17 +68,16 @@ public class TimeSelect extends HttpServlet {
 			connection.close();
 			
 			//use newSeats to generate the table
-			String tableGen = Integer.toString(Seats);
 			String table = "<table align='center'>";
-			for (int i = 0; i < tableGen.length(); i++) {
+			for (int i = 0; i < Seats.length(); i++) {
 				if (i % 4 == 0) {
 					table += "<tr>";
 				}
-				if (tableGen.charAt(i) == '0') {
+				if (Seats.charAt(i) == '0') {
 					table += "<th><form action='ReserveSeat' method='post'>" + //
 							"<input type='submit' class='ReserveSeat' name='" +
 							seatArray[i] + "' value='" + seatArray[i] + "'></form></th>";
-				} else if (tableGen.charAt(i) == '1') {
+				} else if (Seats.charAt(i) == '1') {
 					table += "<th><button type='button' class='reserved'><h1>X</h1></button></th>";
 				}
 				if (i % 4 == 3) {

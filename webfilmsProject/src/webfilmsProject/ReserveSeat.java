@@ -35,8 +35,9 @@ public class ReserveSeat extends HttpServlet {
 		String time = InformationManager.getTime(); //TODO need to set this in TimeSelect
 		
 		Connection connection = null;
-		String getInfoSql = "SELECT * FROM " + theater + " WHERE " + movie + " in (SELECT " + movie + " FROM " + theater + " GROUP BY " + movie + " HAVING count(*) > 1)";
-		int Seats = 0, id = 1;
+		String getInfoSql = "SELECT * FROM " + theater + " WHERE name='" + movie + "'";
+		String Seats = "";
+		int id = 1;
 		String Time = "";
 	    
 		try {
@@ -57,13 +58,14 @@ public class ReserveSeat extends HttpServlet {
 			PreparedStatement preparedStmt = connection.prepareStatement(getInfoSql);
 			ResultSet rs = preparedStmt.executeQuery();
 			
-			int newSeats = 0;
+			String newSeats = "";
 			while (rs.next()) {
 				Time = rs.getString("Time").trim();
 				if (Time.equals(time)) {
-					Seats = rs.getInt("Seats");
-					newSeats = (int) (Seats + Math.pow(10, (seatArray.length - seatNum - 1))); //issue of what happens if the seat was already reserved
-					preparedStmt.execute("UPDATE " + theater + " SET Movie = " + movie + ", Time = " + time + ", Seats = " + newSeats + " WHERE id = " + id);
+					Seats = rs.getString("Seats").trim();
+					newSeats = Seats.substring(0, seatNum) + '1' + Seats.substring(seatNum + 1);
+					System.out.println("UPDATE " + theater + " SET seats='" + newSeats + "' WHERE id='" + rs.getString("id").trim() + "'");
+					preparedStmt.execute("UPDATE " + theater + " SET seats='" + newSeats + "' WHERE id='" + rs.getString("id").trim() + "'");
 					break;
 				}
 				id++;
@@ -73,17 +75,16 @@ public class ReserveSeat extends HttpServlet {
 			connection.close();
 			
 			//use newSeats to generate the table
-			String tableGen = Integer.toString(newSeats);
 			String table = "<table align='center'>";
-			for (int i = 0; i < tableGen.length(); i++) {
+			for (int i = 0; i < newSeats.length(); i++) {
 				if (i % 4 == 0) {
 					table += "<tr>";
 				}
-				if (tableGen.charAt(i) == '0') {
+				if (newSeats.charAt(i) == '0') {
 					table += "<th><form action='ReserveSeat' method='post'>" + //
 							"<input type='submit' class='ReserveSeat' name='" +
 							seatArray[i] + "' value='" + seatArray[i] + "'></form></th>";
-				} else if (tableGen.charAt(i) == '1') {
+				} else if (newSeats.charAt(i) == '1') {
 					table += "<th><button type='button' class='reserved'><h1>X</h1></button></th>";
 				}
 				if (i % 4 == 3) {
