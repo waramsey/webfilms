@@ -94,7 +94,7 @@ public class TheaterSelect extends HttpServlet {
 		            "margin-right: 20px; margin-bottom: 15px;" + //
 		            "}</style>" + //
 		            "<div style='background-color:#a9a9a9' align='center'><h1>" + theaterName + "</h1></div>" + //
-		            "<table align='center><tr>" + table + "</tr></table>");
+		            "<table align='center'><tr>" + table + "</tr></table>");
 
 		      out.println("</body></html>");
 		} catch (Exception e) {
